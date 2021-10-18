@@ -1,5 +1,4 @@
 <?php
-/*Changed 02/06/2021 Ceduher*/
 require_once('includes/nusoap.php');
  dirname(__FILE__) .
 set_time_limit(0);
@@ -13,7 +12,7 @@ $server->wsdl->addComplexType(
         'ArregloListaClientes', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definici贸n del tipo secuencia(all|sequence|choice)
+        '', // definici髇 del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -44,7 +43,7 @@ $server->wsdl->addComplexType(
         'ArregloListaProductos', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definici贸n del tipo secuencia(all|sequence|choice)
+        '', // definici髇 del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -87,7 +86,7 @@ $server->wsdl->addComplexType(
         'ArregloListaTipoPago', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definici贸n del tipo secuencia(all|sequence|choice)
+        '', // definici髇 del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -112,7 +111,7 @@ $server->wsdl->addComplexType(
         'ArregloListaVendedores', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definici贸n del tipo secuencia(all|sequence|choice)
+        '', // definici髇 del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -174,7 +173,7 @@ function listClientes() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         }else{
             try { 
 				$tsql = "SELECT cli.co_cli as cocli, cli.cli_des as clides, cli.respons as clires, cli.email as cliemail, cli.rif as clirif,  cli.nit as clinit, cli.direc1 as dir1, cli.ciudad as dir1, cli.estado as edo, pai.pais_des as pais, cli.telefonos as telef, cli.fax as clifax FROM clientes as cli inner join paises as pai on cli.co_pais = pai.co_pais ORDER BY cli.co_cli DESC"; $stmt = sqlsrv_query( $conn, $tsql);
@@ -206,7 +205,7 @@ function listProductos() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
 				$tsql = "SELECT a.co_art as parte, a.art_des as descripcion, cat.cat_des as marca, a.uni_venta as unimed,
@@ -241,7 +240,6 @@ function listProductos() {
         return new soap_fault('Client', '', 'No esta autorizado para ingresar');
 	}
 }
-
 function getGUID(){
         mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
         $charid = strtoupper(md5(uniqid(rand(), true)));
@@ -255,15 +253,14 @@ function getGUID(){
             .chr(125);//
         return $uuid;
 }
-
 function setCotizacion($cotizacion, $productos) {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
-                $tsql01 = "SELECT MAX(fact_num) + 1 as maximo FROM pedidos";
+                $tsql01 = "SELECT MAX(fact_num) + 1 as maximo FROM cotiz_c";
  				$stmt01 = sqlsrv_query( $conn, $tsql01);
 				if ($stmt01 === false) { return new soap_fault('Client', '', 'Error en la consulta');}
 				$row01 = sqlsrv_fetch_array($stmt01);
@@ -285,80 +282,82 @@ function setCotizacion($cotizacion, $productos) {
  				$stmt11 = sqlsrv_query( $conn, $tsql11);
 				if ($stmt11 === false) { return new soap_fault('Client', '', 'Error en la consulta');}
 				
-                $tsql02 = "INSERT INTO pedidos ( fact_num,
-											  contrib,
-											  nombre,
-											  rif,
-											  nit,
-											  status,
-											  comentario,
-											  descrip,
-											  saldo,
-											  fec_emis,
-											  fec_venc,
-											  co_cli,
-											  co_ven,
-											  co_tran,
-											  dir_ent,
-											  forma_pag,
-											  tot_bruto,
-											  tot_neto,
-											  glob_desc,
-											  tot_reca,
-											  porc_gdesc,
-											  porc_reca,
-											  total_uc,
-											  total_cp,
-											  tot_flete,
-											  monto_dev,
-											  totklu,
-											  anulada,
-											  impresa,
-											  iva,
-											  iva_dev,
-											  feccom,
-											  numcom,
-											  tasa,
-											  moneda,
-											  cta_contab,
-											  seriales,
-											  tasag,
-											  tasag10,
-											  tasag20,
-											  campo1,
-											  campo2,
-											  campo3,
-											  campo4,
-											  campo5,
-											  campo6,
-											  campo7,
-											  campo8,
-											  co_us_in,
-											  fe_us_in,
-											  co_us_mo,
-											  fe_us_mo,
-											  co_us_el,
-											  fe_us_el,
-											  revisado,
-											  trasnfe,
-											  co_sucu,
-											  rowguid,
-											  mon_ilc,
-											  otros1,
-											  otros2,
-											  otros3,
-											  serialp,
-											  valido,
-											  dis_cen,
-											  aux01,
-											  aux02,
-											  ID,
-											  salestax,
-											  origen,
-											  origen_d,
-											  sta_prod,
-											  telefono)                                             
-											 VALUES  ( 
+                $tsql02 = "INSERT INTO cotiz_c ( 
+                                            fact_num,
+                                            contrib,
+                                            nombre,
+                                            rif,
+                                            nit,
+                                            status,
+                                            comentario,
+                                            descrip,
+                                            saldo,
+                                            fec_emis,
+                                            fec_venc,
+                                            co_cli,
+                                            co_ven,
+                                            co_tran,
+                                            dir_ent,
+                                            forma_pag,
+                                            tot_bruto,
+                                            tot_neto,
+                                            glob_desc,
+                                            tot_reca,
+                                            porc_gdesc,
+                                            porc_reca,
+                                            total_uc,
+                                            total_cp,
+                                            tot_flete,
+                                            monto_dev,
+                                            totklu,
+                                            anulada,
+                                            impresa,
+                                            iva,
+                                            iva_dev,
+                                            feccom,
+                                            numcom,
+                                            tasa,
+                                            moneda,
+                                            cta_contab,
+                                            seriales,
+                                            tasag,
+                                            tasag10,
+                                            tasag20,
+                                            campo1,
+                                            campo2,
+                                            campo3,
+                                            campo4,
+                                            campo5,
+                                            campo6,
+                                            campo7,
+                                            campo8,
+                                            co_us_in,
+                                            fe_us_in,
+                                            co_us_mo,
+                                            fe_us_mo,
+                                            co_us_el,
+                                            fe_us_el,
+                                            revisado,
+                                            trasnfe,
+                                            co_sucu,
+                                            rowguid,
+                                            mon_ilc,
+                                            otros1,
+                                            otros2,
+                                            otros3,
+                                            serialp,
+                                            valido,
+                                            dis_cen,
+                                            aux01,
+                                            aux02,
+                                            ID,
+                                            salestax,
+                                            origen,
+                                            origen_d,
+                                            sta_prod,
+                                            telefono
+                                        )                                             
+								VALUES  ( 
 											 ".$numCotizacion.",
 											  1, 
 											 '".$cotizacion['nombreCliente']."',
@@ -393,12 +392,12 @@ function setCotizacion($cotizacion, $productos) {
 											 '".date("Y-m-d H:i:s")."',
 											 0,
 											 1.00000,
-											 'BSF',
+											 'US$',
 											 '',
 											 0,
+											 16.00000,
 											 12.00000,
-											 0.00000,
-											 0.00000,
+											 12.00000,
 											 '',
 											 '',
 											 '',
@@ -451,99 +450,99 @@ function setCotizacion($cotizacion, $productos) {
 					if ($stmt14 === false) { return new soap_fault('Client', '', 'Error en la consulta art');}
 					$row14 = sqlsrv_fetch_array($stmt14);
 					
-$tsql03 = " INSERT INTO reng_ped  (
-fact_num, 
-reng_num, 
-tipo_doc, 
-reng_doc, 
-num_doc, 
-co_art, 
-co_alma, 
-total_art, 
-stotal_art, 
-pendiente, 
-uni_venta, 
-prec_vta, 
-porc_desc, 
-tipo_imp, 
-reng_neto, 
-cos_pro_un, 
-ult_cos_un, 
-ult_cos_om, 
-cos_pro_om, 
-total_dev, 
-monto_dev, 
-prec_vta2, 
-anulado, 
-des_art, 
-seleccion, 
-cant_imp, 
-comentario, 
-rowguid, 
-total_uni, 
-mon_ilc, 
-otros, 
-nro_lote, 
-fec_lote, 
-pendiente2, 
-tipo_doc2, 
-reng_doc2, 
-num_doc2, 
-serialp, 
-valido, 
-co_alma2, 
-dis_cen, 
-aux01, 
-aux02, 
-cant_prod, 
-imp_prod)  
- VALUES   (
-".$numCotizacion.",
-".$i.",
-'', 
-0, 
-0, 
-'".trim($producto['codigoProducto'])."', 
-'000001', 
-".$producto['cantidadProducto'].", 
-0.00000,
-".$producto['cantidadProducto'].",
-'".$producto['uniVenta']."', 
-".$producto['montoUnitario'].",
-'',
-1,
-".($producto['cantidadProducto']*$producto['montoUnitario']).",
-".$row14['cos_pro_un'].",
-".$row14['ult_cos_un'].",
-0.00000, 
-0.00000, 
-0.00000, 
-0.00000, 
-0.00000,                                                                                                                                                                                       
-0,
-'".$producto['descripcionProducto']."',
-0,
-0.00000,
-'',
-'".getGUID()."',
-1,
-0.00000,
-0.00000,
-'',
-'".date("Y-m-d H:i:s")."', 
-0.00000, 
-'', 
-0, 
-0, 
-'',
-0, 
-'',
-'', 
-0.00000, 
-'', 
-0.00000,
-0.00000)";
-/* total_uni => antes ".$producto['cantidadProducto']." ahora 1 (02/06/2021)*/
+                    $tsql03 = " INSERT INTO reng_cac  (
+                                            fact_num, 
+                                            reng_num, 
+                                            tipo_doc, 
+                                            reng_doc, 
+                                            num_doc, 
+                                            co_art, 
+                                            co_alma, 
+                                            total_art, 
+                                            stotal_art, 
+                                            pendiente, 
+                                            uni_venta, 
+                                            prec_vta, 
+                                            porc_desc, 
+                                            tipo_imp, 
+                                            reng_neto, 
+                                            cos_pro_un, 
+                                            ult_cos_un, 
+                                            ult_cos_om, 
+                                            cos_pro_om, 
+                                            total_dev, 
+                                            monto_dev, 
+                                            prec_vta2, 
+                                            anulado, 
+                                            des_art, 
+                                            seleccion, 
+                                            cant_imp, 
+                                            comentario, 
+                                            rowguid, 
+                                            total_uni, 
+                                            mon_ilc, 
+                                            otros, 
+                                            nro_lote, 
+                                            fec_lote, 
+                                            pendiente2, 
+                                            tipo_doc2, 
+                                            reng_doc2, 
+                                            num_doc2, 
+                                            serialp, 
+                                            valido, 
+                                            co_alma2, 
+                                            dis_cen, 
+                                            aux01, 
+                                            aux02, 
+                                            cant_prod, 
+                                            imp_prod)  
+                                VALUES   (
+                                            ".$numCotizacion.",
+                                            ".$i.",
+                                            '', 
+                                            0, 
+                                            0, 
+                                            '".trim($producto['codigoProducto'])."', 
+                                            '000001', 
+                                            ".$producto['cantidadProducto'].", 
+                                            0.00000,
+                                            ".$producto['cantidadProducto'].",
+                                            '".$producto['uniVenta']."', 
+                                            ".$producto['montoUnitario'].",
+                                            '',
+                                            1,
+                                            ".($producto['cantidadProducto']*$producto['montoUnitario']).",
+                                            ".$row14['cos_pro_un'].",
+                                            ".$row14['ult_cos_un'].",
+                                            0.00000, 
+                                            0.00000, 
+                                            0.00000, 
+                                            0.00000, 
+                                            0.00000,                                                                                                                                                                                       
+                                            0,
+                                            '".$producto['descripcionProducto']."',
+                                            0,
+                                            0.00000,
+                                            '',
+                                            '".getGUID()."',
+                                            1,
+                                            0.00000,
+                                            0.00000,
+                                            '',
+                                            '".date("Y-m-d H:i:s")."', 
+                                            0.00000, 
+                                            '', 
+                                            0, 
+                                            0, 
+                                            '',
+                                            0, 
+                                            '',
+                                            '', 
+                                            0.00000, 
+                                            '', 
+                                            0.00000,
+                                            0.00000)";
+                    /* total_uni => antes ".$producto['cantidadProducto']." ahora 1 (02/06/2021)*/
 					$stmt03 = sqlsrv_query( $conn, $tsql03);
 					if ($stmt03 === false) { 
 						if( ($errors = sqlsrv_errors() ) != null) {
@@ -551,17 +550,18 @@ imp_prod)
 								$str = "SQLSTATE: ".$error[ 'SQLSTATE']." - "."code: ".$error[ 'code']." - "."message: ".$error[ 'message'];
 							}
 						}
-					return new soap_fault('Client', '', 'Error en la consulta reng_ped: '.$tsql03);}
+                        return new soap_fault('Client', '', 'Error en la consulta reng_cac: '.$tsql03);
+                    }
 
 					/*
-					$tsql15 = "UPDATE pedidos SET status = '0' WHERE fact_num = ".$numCotizacion."";
+					$tsql15 = "UPDATE cotiz_c SET status = '0' WHERE fact_num = ".$numCotizacion."";
 					$stmt15 = sqlsrv_query( $conn, $tsql15);
-					if ($stmt15 === false) { return new soap_fault('Client', '', 'Error en la consulta update pedidos '.$tsql15);}
+					if ($stmt15 === false) { return new soap_fault('Client', '', 'Error en la consulta update cotiz_c '.$tsql15);}
 					*/
 					/*
-					$tsql16 = "UPDATE reng_ped SET pendiente = '".$producto['cantidadProducto']."', total_uni = '1', cos_pro_un = '".$row14['cos_pro_un']."', ult_cos_un =  WHERE fact_num = ".$numCotizacion; 
+					$tsql16 = "UPDATE reng_cac SET pendiente = '".$producto['cantidadProducto']."', total_uni = '1', cos_pro_un = '".$row14['cos_pro_un']."', ult_cos_un =  WHERE fact_num = ".$numCotizacion; 
 					$stmt16 = sqlsrv_query( $conn, $tsql16);
-					if ($stmt16 === false) { return new soap_fault('Client', '', 'Error en la consulta reng_ped');}
+					if ($stmt16 === false) { return new soap_fault('Client', '', 'Error en la consulta reng_cac');}
 					*/
 
 					$tsql12 = "UPDATE st_almac SET STOCK_COM = 0.00000, sSTOCK_COM = 0.00000  WHERE co_art = '".trim($producto['codigoProducto'])."' AND co_alma = '000001'";
@@ -587,7 +587,7 @@ function listTipoPago() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
 				$tsql = "SELECT co_cond as ID, cond_des as descripcion, dias_cred FROM condicio"; 
@@ -613,7 +613,7 @@ function listVendedores() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
 				$tsql = "SELECT co_ven, ven_des FROM vendedor WHERE co_ven != 'NA' ORDER BY co_ven ASC"; $stmt = sqlsrv_query( $conn, $tsql);
@@ -640,7 +640,7 @@ function getIva() {
     if (getSeguridad ()) {
         include_once("../include/tabla.php");
         if($linkTabla === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
                 $sql = "SELECT TOP 1 Impuesto, Descripcion, Porcentaje FROM Impuestos ORDER BY Impuesto DESC";
@@ -666,7 +666,7 @@ function getCambioMoneda() {
     if (getSeguridad ()) {
         include_once("../include/tabla.php");
         if($linkTabla === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.');
         } else {
             try {
                 $sql = "SELECT ID, CambioBSUS FROM CambioMoneda";
@@ -691,7 +691,7 @@ function getUsuario($usuario, $clave) {
     if(getSeguridad ()) {
 	    include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexi贸n con la DB.'); /*die( print_r( sqlsrv_errors(), true));*/
+            return new soap_fault('Client', '', 'Error en la conexi髇 con la DB.'); /*die( print_r( sqlsrv_errors(), true));*/
         } else {
             try {
 				$tsql = "SELECT top 1 co_ven, ven_des, login, password, tipo FROM vendedor WHERE co_ven != 'NA' AND login = '".$usuario."' AND password = '".$clave."';";
