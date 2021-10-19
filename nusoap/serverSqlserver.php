@@ -12,7 +12,7 @@ $server->wsdl->addComplexType(
         'ArregloListaClientes', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definición del tipo secuencia(all|sequence|choice)
+        '', // definiciï¿½n del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -43,7 +43,7 @@ $server->wsdl->addComplexType(
         'ArregloListaProductos', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definición del tipo secuencia(all|sequence|choice)
+        '', // definiciï¿½n del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -86,7 +86,7 @@ $server->wsdl->addComplexType(
         'ArregloListaTipoPago', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definición del tipo secuencia(all|sequence|choice)
+        '', // definiciï¿½n del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -111,7 +111,7 @@ $server->wsdl->addComplexType(
         'ArregloListaVendedores', // Nombre
         'complexType', // Tipo de Clase
         'array', // Tipo de PHP
-        '', // definición del tipo secuencia(all|sequence|choice)
+        '', // definiciï¿½n del tipo secuencia(all|sequence|choice)
         'SOAP-ENC:Array', // Restricted Base
         array(),
         array(
@@ -173,7 +173,7 @@ function listClientes() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         }else{
             try { 
 				$tsql = "SELECT cli.co_cli as cocli, cli.cli_des as clides, cli.respons as clires, cli.email as cliemail, cli.rif as clirif,  cli.nit as clinit, cli.direc1 as dir1, cli.ciudad as dir1, cli.estado as edo, pai.pais_des as pais, cli.telefonos as telef, cli.fax as clifax FROM clientes as cli inner join paises as pai on cli.co_pais = pai.co_pais ORDER BY cli.co_cli DESC"; $stmt = sqlsrv_query( $conn, $tsql);
@@ -205,7 +205,7 @@ function listProductos() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
 				$tsql = "SELECT a.co_art as parte, a.art_des as descripcion, cat.cat_des as marca, a.uni_venta as unimed,
@@ -257,7 +257,7 @@ function setCotizacion($cotizacion, $productos) {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if ($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
                 $tsql01 = "SELECT MAX(fact_num) + 1 as maximo FROM cotiz_c";
@@ -278,7 +278,7 @@ function setCotizacion($cotizacion, $productos) {
 				$fechaVencimiento = strtotime ( '+'.$diasCred.' day' , strtotime ( $fecha ) ) ;
 				$fechaVencimiento = date ( 'Y-m-d H:i:s' , $fechaVencimiento );
 
-                $tsql11 = "UPDATE par_emp SET ped_num=".$numCotizacion." WHERE cod_emp='MIURA_A'";
+                $tsql11 = "UPDATE par_emp SET ped_num=".$numCotizacion." WHERE cod_emp='MIURA_A2'";
  				$stmt11 = sqlsrv_query( $conn, $tsql11);
 				if ($stmt11 === false) { return new soap_fault('Client', '', 'Error en la consulta');}
 				
@@ -345,12 +345,6 @@ function setCotizacion($cotizacion, $productos) {
                                             otros1,
                                             otros2,
                                             otros3,
-                                            serialp,
-                                            valido,
-                                            dis_cen,
-                                            aux01,
-                                            aux02,
-                                            ID,
                                             salestax,
                                             origen,
                                             origen_d,
@@ -421,16 +415,11 @@ function setCotizacion($cotizacion, $productos) {
 											 0.00000,
 											 0.00000,
 											 '',
-											 0,
-											 '',
-											 0.00000,
-											 '',
-											 -1,
 											 '',
 											 '',
 											 '',
-											 '',
-											 '')";
+											 ''
+                                             )";
 				$stmt02 = sqlsrv_query( $conn, $tsql02);
 
 				if ($stmt02 === false) { 
@@ -439,7 +428,8 @@ function setCotizacion($cotizacion, $productos) {
 							$str = "SQLSTATE: ".$error[ 'SQLSTATE']." - "."code: ".$error[ 'code']." - "."message: ".$error[ 'message'];
 						}
 					}				
-				return new soap_fault('Client', '', 'Error en la consulta Cab: '.$tsql02);}
+                    return new soap_fault('Client', '', 'Error en la consulta Cab: '.$tsql02);
+                }
                 $i = 0;
                 foreach ($productos as $producto) {
                     $i++;
@@ -487,11 +477,8 @@ function setCotizacion($cotizacion, $productos) {
                                             pendiente2, 
                                             tipo_doc2, 
                                             reng_doc2, 
-                                            num_doc2, 
-                                            serialp, 
-                                            valido, 
+                                            num_doc2,  
                                             co_alma2, 
-                                            dis_cen, 
                                             aux01, 
                                             aux02, 
                                             cant_prod, 
@@ -535,9 +522,6 @@ function setCotizacion($cotizacion, $productos) {
                                             0, 
                                             0, 
                                             '',
-                                            0, 
-                                            '',
-                                            '', 
                                             0.00000, 
                                             '', 
                                             0.00000,
@@ -587,7 +571,7 @@ function listTipoPago() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
 				$tsql = "SELECT co_cond as ID, cond_des as descripcion, dias_cred FROM condicio"; 
@@ -613,7 +597,7 @@ function listVendedores() {
     if (getSeguridad ()) {
         include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
 				$tsql = "SELECT co_ven, ven_des FROM vendedor WHERE co_ven != 'NA' ORDER BY co_ven ASC"; $stmt = sqlsrv_query( $conn, $tsql);
@@ -640,7 +624,7 @@ function getIva() {
     if (getSeguridad ()) {
         include_once("../include/tabla.php");
         if($linkTabla === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
                 $sql = "SELECT TOP 1 Impuesto, Descripcion, Porcentaje FROM Impuestos ORDER BY Impuesto DESC";
@@ -666,7 +650,7 @@ function getCambioMoneda() {
     if (getSeguridad ()) {
         include_once("../include/tabla.php");
         if($linkTabla === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.');
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.');
         } else {
             try {
                 $sql = "SELECT ID, CambioBSUS FROM CambioMoneda";
@@ -691,7 +675,7 @@ function getUsuario($usuario, $clave) {
     if(getSeguridad ()) {
 	    include_once("../include/conn.php");
         if($conn === false) {
-            return new soap_fault('Client', '', 'Error en la conexión con la DB.'); /*die( print_r( sqlsrv_errors(), true));*/
+            return new soap_fault('Client', '', 'Error en la conexiï¿½n con la DB.'); /*die( print_r( sqlsrv_errors(), true));*/
         } else {
             try {
 				$tsql = "SELECT top 1 co_ven, ven_des, login, password, tipo FROM vendedor WHERE co_ven != 'NA' AND login = '".$usuario."' AND password = '".$clave."';";
